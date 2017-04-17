@@ -1,0 +1,1 @@
+/Users/Miguel/Documents/Scripts/white_lab/alignment/utility/report_filtering/merge_snv_indel_table.py
