@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import sys
 import re
-sys.path.append('/home/ubuntu/TOOLS/Scripts/')
-from utility.date_time import date_time
+sys.path.append('../')
+from date_time import date_time
 
 
 def create_pon(vlist):

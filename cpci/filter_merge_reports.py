@@ -2,7 +2,6 @@
 import sys
 import re
 import os
-sys.path.append('/home/ubuntu/TOOLS/Scripts/')
 import pdb
 
 
@@ -228,8 +227,8 @@ def filter_merge_reports(reports, panel, num_samp, min_type, length, vaf, tn_str
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Creates merged variant/vaf reports and filters on vaf, impact, '
-                                                 'biotype, t/n ratio, panel of normals, coverage.')
+    parser = argparse.ArgumentParser(description='Creates merged variant/vaf reports and filters on vaf using vaf, '
+                                                 'impact, biotype, t/n ratio, panel of normals, coverage.')
     parser.add_argument('-r', '--reports', action='store', dest='reports',
                         help='List of report files.  TN reports must be listed first')
     parser.add_argument('-p', '--panel', action='store', dest='panel',
