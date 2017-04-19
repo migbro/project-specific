@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
-from utilities.date_time import date_time
+from date_time import date_time
 
 
 def cov_hole_matrix(hlist):
