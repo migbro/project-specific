@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
-proj_path = os.path.join(os.path.realpath(__file__), '..')
-sys.path.insert(0, proj_path)
-from date_time import date_time
-
+from utilities.date_time import date_time
 
 
 def cov_hole_matrix(hlist):
