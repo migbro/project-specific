@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
-sys.path.append('../')
+
 from date_time import date_time
 
 
