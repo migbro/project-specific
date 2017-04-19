@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import sys
 import os
+sys.path.append('../')
+from date_time import date_time
 
 
 def cov_hole_matrix(hlist):
@@ -10,6 +12,7 @@ def cov_hole_matrix(hlist):
     for floc in open(hlist):
         floc = floc.rstrip('\n')
         samp = os.path.basename(floc).replace('.hist', '')
+        sys.stderr.write(date_time() + 'Processing file ' + floc + 'sample name ' + samp + '\n')
         slist.append(samp)
         fh = open(floc)
         for line in fh:
@@ -22,7 +25,7 @@ def cov_hole_matrix(hlist):
             else:
                 fh.close()
                 break
-
+    sys.stderr.write(date_time() + 'Outputting matrix\n')
     print 'Sample/Region\t' + '\t'.join(slist)
     for region in cov_dict:
         sys.stdout.write(region)
