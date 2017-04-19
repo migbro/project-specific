@@ -11,7 +11,7 @@ def cov_hole_matrix(hlist):
     for floc in open(hlist):
         floc = floc.rstrip('\n')
         samp = os.path.basename(floc).replace('.hist', '')
-        sys.stderr.write(date_time() + 'Processing file ' + floc + 'sample name ' + samp + '\n')
+        sys.stderr.write(date_time() + 'Processing file ' + floc + ' sample name ' + samp + '\n')
         slist.append(samp)
         fh = open(floc)
         for line in fh:
