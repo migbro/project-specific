@@ -21,6 +21,8 @@ def cov_hole_matrix(hlist):
                     cov_dict[info[3]][samp] = info[4]
             else:
                 fh.close()
+                break
+
     print 'Sample/Region\t' + '\t'.join(slist)
     for region in cov_dict:
         sys.stdout.write(region)
