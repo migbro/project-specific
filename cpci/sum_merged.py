@@ -83,5 +83,3 @@ for gene in gene_dict:
             gene_out.write('\t0')
     gene_out.write('\n')
 gene_out.close()
-
-            

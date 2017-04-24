@@ -95,7 +95,7 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov):
     snv_suffix = '.subsitutions.vep.prioritized_impact.report.xls'
     # indel_suffix = '.indels.vep.prioritized_impact.report.xls'
 
-    head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT\t' \
+    head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT' \
            '\tCODON_CHANGE\tAMINO_ACID_CHANGE'
     print head
     snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'ExAC_MAF',
@@ -107,7 +107,7 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov):
     indel_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'ExAC_MAF',
                      'impact', 'effect', 'codon_change', 'amino_acid_change')
     indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 14, 'vaf': 16, 'snp_ID': 4,
-                       'ExAC_MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 11, 'amino_acid_change': 12}
+                       'ExAC_MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 12, 'amino_acid_change': 13}
     vclass = 8
     banned_tup = {}
     length = int(length)
