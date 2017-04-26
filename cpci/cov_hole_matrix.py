@@ -4,10 +4,14 @@ import os
 from date_time import date_time
 
 
-def cov_hole_matrix(hlist):
+def cov_hole_matrix(hlist, aflag):
     cov_dict = {}
     low = 30
     slist = []
+    # coverage column is 4th unless bedfile wasn't annotated
+    c = 4
+    if aflag == 'n':
+        c = 3
     for floc in open(hlist):
         floc = floc.rstrip('\n')
         samp = os.path.basename(floc).replace('.hist', '')
@@ -17,10 +21,13 @@ def cov_hole_matrix(hlist):
         for line in fh:
             if line[0:3] != 'all':
                 info = line.rstrip('\n').split('\t')
-                if int(info[4]) < low:
-                    if info[3] not in cov_dict:
-                        cov_dict[info[3]] = {}
-                    cov_dict[info[3]][samp] = info[4]
+                if int(info[c]) < low:
+                    reg = info[3]
+                    if aflag == 'n':
+                        reg = info[0] + ':' + info[1] + '-' + info[2]
+                    if reg not in cov_dict:
+                        cov_dict[reg] = {}
+                    cov_dict[reg][samp] = info[c]
             else:
                 fh.close()
                 break
@@ -41,6 +48,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create table with sample and regions on low coverage.')
     parser.add_argument('-l', '--list', action='store', dest='hlist',
                         help='bedtools hist table list')
+    parser.add_argument('-a', '--annot_flag', action='store', dest='aflag',
+                        help='y or n flag if bedtools file was annotated')
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -48,4 +57,5 @@ if __name__ == "__main__":
 
     inputs = parser.parse_args()
     hlist = inputs.hlist
-    cov_hole_matrix(hlist)
+    aflag = inputs.aflag
+    cov_hole_matrix(hlist, aflag)
