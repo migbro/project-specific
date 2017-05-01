@@ -2,8 +2,7 @@
 import re
 import sys
 
-sys.path.append('../')
-from utilities.date_time import date_time
+from date_time import date_time
 
 
 def create_pon(vlist):
