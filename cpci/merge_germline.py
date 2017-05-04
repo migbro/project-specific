@@ -27,6 +27,8 @@ def process_germ_report(bnid, report, germ_head_list, germ_head_dict, cadd, cov,
         if bnid in pos_gene[chr_pos]:
             continue
         pos_gene[chr_pos][bnid] = 1
+        # set dict to fixed gene name
+        info[germ_head_dict['gene']] = pos_gene[chr_pos]['name']
         if cadd != 0:
             if len(info[germ_head_dict['cadd']]) < 1 or (len(info[germ_head_dict['cadd']]) > 1 and
                                                                  float(info[germ_head_dict['cadd']]) < cadd):
