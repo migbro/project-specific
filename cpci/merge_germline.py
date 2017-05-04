@@ -27,19 +27,26 @@ def process_germ_report(bnid, report, germ_head_list, germ_head_dict, cadd, cov,
         if bnid in pos_gene[chr_pos]:
             continue
         pos_gene[chr_pos][bnid] = 1
-        if len(info[germ_head_dict['cadd']]) > 1 and float(info[germ_head_dict['cadd']]) < cadd:
-            continue
+        if cadd != 0:
+            if len(info[germ_head_dict['cadd']]) < 1 or (len(info[germ_head_dict['cadd']]) > 1 and
+                                                                 float(info[germ_head_dict['cadd']]) < cadd):
+                continue
         if len(info[germ_head_dict['ref']]) > length or len(info[germ_head_dict['alt']]) > length:
             continue
         if info[germ_head_dict['impact']] in weak_impact:
             continue
         if len(info[germ_head_dict['ExAC_MAF']]) > 0 and float(info[germ_head_dict['ExAC_MAF']]) > maf:
             continue
+        # pdb.set_trace()
         if int(info[germ_head_dict['cov']]) < cov:
             continue
         sys.stdout.write(bnid)
-        info[germ_head_dict['alt_ct']] = "{0:.0f}%".format(int(info[germ_head_dict['alt_ct']]) /
-                                                           float(info[germ_head_dict['cov']]))
+        try:
+            info[germ_head_dict['alt_ct']] = \
+            "{0:.0f}%".format(int(info[germ_head_dict['alt_ct']])/float(info[germ_head_dict['cov']]) * 100)
+        except:
+            sys.stderr.write('Format failure for line:\n' + line)
+            # exit(1)
         for key in germ_head_list:
             sys.stdout.write('\t' + info[germ_head_dict[key]])
         print
@@ -53,7 +60,6 @@ def filter_merge_reports(reports, length, cadd, cov):
     head = 'Sample\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tAllele_pct\tPosition coverage\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT' \
            '\tCODON_CHANGE\tAMINO_ACID_CHANGE\tCADD'
     print head
-
     germ_head_list = ('VARIANT_CLASS', 'gene', 'chr', 'pos', 'ref', 'alt', 'alt_ct', 'cov', 'snp_ID', 'ExAC_MAF',
                      'impact', 'effect', 'codon_change', 'amino_acid_change', 'cadd')
     germ_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_ct': 4, 'cov': 5, 'snp_ID': 13,
@@ -62,6 +68,7 @@ def filter_merge_reports(reports, length, cadd, cov):
     # banned_tup = {}
     length = int(length)
     cadd = int(cadd)
+    cov = int(cov)
     # cov = int(cov)
     # for line in open(panel):
     #     info = line.rstrip('\n').split('\t')
