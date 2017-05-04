@@ -5,12 +5,23 @@
 import sys
 import re
 
+
+def write_line(fh, line):
+    info = line.split('\t')
+    starts = info[3].split(',')
+    ends = info[4].split(',')
+    info.insert(2, starts[0])
+    info.insert(3, ends[-2])
+    fh.write('\t'.join(info))
+
 fh = open(sys.argv[1])
 head = next(fh)
 filt = open('filtered_tx_list.txt', 'w')
 review = open('tx_to_review.txt', 'w')
-
-filt.write(head)
+new_head = head.rstrip('\n').split('\t')
+new_head.insert(2, 'tx_start')
+new_head.insert(3, 'tx_end')
+filt.write('\t'.join(new_head) + '\n')
 review.write(head)
 
 tx_dict = {}
@@ -40,11 +51,14 @@ for line in fh:
 fh.close()
 for gene in tx_dict:
     if len(tx_dict[gene]['list']) == 1:
-        filt.write(tx_dict[gene]['list'][0])
+        # filt.write(tx_dict[gene]['list'][0])
+        write_line(filt, tx_dict[gene]['list'][0])
     elif tx_dict[gene]['flag'] < 999:
-        filt.write(tx_dict[gene]['best'])
+        # filt.write(tx_dict[gene]['best'])
+        write_line(filt, tx_dict[gene]['best'])
     elif tx_dict[gene]['id_flag'] < 99999999999999999999:
-        filt.write(tx_dict[gene]['id_best'])
+        # filt.write(tx_dict[gene]['id_best'])
+        write_line(filt, tx_dict[gene]['id_best'])
     else:
         review.write(''.join(tx_dict[gene]['list']))
 filt.close()
