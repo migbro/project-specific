@@ -24,15 +24,16 @@ def calc_aa_gene(ref_cur, v_pos, info):
                 j += 1
         starts[j] = cds_start
         for i in xrange(j, len(starts)-1, 1):
+            # pdb.set_trace()
             # starts[i] = str(int(starts[i]) + 1)
             if int(starts[i]) <= v_pos <= int(ends[i]):
                 # pdb.set_trace()
-                aa_pos = str(int((ceil(v_pos - int(starts[i]))/3.0)) + cur_aa_len)
+                aa_pos = str(int((round(v_pos - int(starts[i]))/3.0)) + cur_aa_len + 1)
                 print '\t'.join(info) + '\t' + aa_pos + '\t' + gene
                 break
             else:
                 temp = (int(ends[i]) - int(starts[i]))
-                cur_aa_len += int(ceil(temp/3.0))
+                cur_aa_len += int(round(temp/3.0))
 
     else:
         # start could be farther or shorter in
@@ -46,7 +47,7 @@ def calc_aa_gene(ref_cur, v_pos, info):
                 j -= 1
         ends[j] = cds_end
         for i in xrange(len(ends)+j, 0, -1):
-            # starts[i] = str(int(starts[i]) + 1)
+            starts[i] = str(int(starts[i]))
 
             if int(starts[i]) <= v_pos <= int(ends[i]):
                 aa_pos = str(int(round((int(ends[i]) - v_pos)/3.0)) + cur_aa_len)
