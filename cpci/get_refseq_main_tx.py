@@ -21,7 +21,7 @@ tx_dict = {}
 
 for line in fh:
     info = line.rstrip('\n').split('\t')
-    gene = info[7]
+    gene = info[5]
     if gene not in tx_dict:
         tx_dict[gene] = {}
         tx_dict[gene]['flag'] = 999
@@ -30,31 +30,44 @@ for line in fh:
         tx_dict[gene]['id_best'] = ''
         tx_dict[gene]['id_flag'] = 99999999999999999999
     tx_dict[gene]['list'].append(line)
-    m = re.search('transcript variant (\d+)', info[-1])
+    m = re.search('transcript variant (\w+),', info[-5])
     try:
-        n = int(m.group(1))
+        try:
+            n = int(m.group(1))
+        except:
+            n = ord(m.group(1))
         if n < tx_dict[gene]['flag']:
             tx_dict[gene]['flag'] = n
             tx_dict[gene]['best'] = line
     except:
         nm_id = info[0].split('_')
-        if int(nm_id[1]) < tx_dict[gene]['id_flag']:
+        if int(nm_id[1]) < tx_dict[gene]['id_flag'] and nm_id[0] == 'NM':
             tx_dict[gene]['id_flag'] = int(nm_id[1])
             tx_dict[gene]['id_best'] = line
 
 fh.close()
+sum_dict = {'single': 0, 'id': 0}
 for gene in tx_dict:
     if len(tx_dict[gene]['list']) == 1:
         # filt.write(tx_dict[gene]['list'][0])
+        sum_dict['single'] += 1
         write_line(filt, tx_dict[gene]['list'][0])
     elif tx_dict[gene]['flag'] < 999:
         # filt.write(tx_dict[gene]['best'])
+        if tx_dict[gene]['flag'] not in sum_dict:
+            sum_dict[tx_dict[gene]['flag']] = 0
+        sum_dict[tx_dict[gene]['flag']] += 1
         write_line(filt, tx_dict[gene]['best'])
+        if tx_dict[gene]['flag'] != 1:
+            sys.stderr.write(gene + '\t' + str(tx_dict[gene]['flag']) + '\n')
     elif tx_dict[gene]['id_flag'] < 99999999999999999999:
         # filt.write(tx_dict[gene]['id_best'])
         write_line(filt, tx_dict[gene]['id_best'])
+        sum_dict['id'] += 1
     else:
         review.write(''.join(tx_dict[gene]['list']))
 filt.close()
 review.close()
+for key in sum_dict:
+    sys.stderr.write(str(key) + '\t' + str(sum_dict[key]) + '\n')
 
