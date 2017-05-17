@@ -96,18 +96,19 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov):
     # indel_suffix = '.indels.vep.prioritized_impact.report.xls'
 
     head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT' \
-           '\tCODON_CHANGE\tAMINO_ACID_CHANGE'
+           '\tCODON_CHANGE\tAMINO_ACID_CHANGE\tTx Isoform Used'
     print head
     snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'ExAC_MAF',
-                     'impact', 'effect', 'codon_change', 'amino_acid_change')
+                     'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
     snv_head_dict = {'gene': 14, 'chr': 0, 'pos': 1, 'ref': 3, 'alt': 4, 'tumor_alt_count': 9, '%_tumor_alt': 10,
                      'snp_ID': 12, 'ExAC_MAF': 13, 'impact': 17, 'effect': 16, 'codon_change': 19,
-                     'amino_acid_change': 20}
+                     'amino_acid_change': 20, 'isoform': 15}
     tn_ratio = 9
     indel_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'ExAC_MAF',
-                     'impact', 'effect', 'codon_change', 'amino_acid_change')
+                     'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
     indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 14, 'vaf': 16, 'snp_ID': 4,
-                       'ExAC_MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 12, 'amino_acid_change': 13}
+                       'ExAC_MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 12, 'amino_acid_change': 13,
+                       'isoform': 7}
     vclass = 8
     banned_tup = {}
     length = int(length)
