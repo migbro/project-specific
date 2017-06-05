@@ -28,7 +28,11 @@ def process_indel_report(pair, report, indel_head_list, indel_head_dict, pos_gen
         if pair in pos_gene[chr_pos]:
             continue
         pos_gene[chr_pos][pair] = 1
-        vap = float(info[indel_head_dict['vaf']]) * 100
+        try:
+            vap = float(info[indel_head_dict['vaf']]) * 100
+        except:
+            sys.stderr.write('Could not format vap for ' + info[indel_head_dict['vaf']] + 'in sample ' + report + '\n')
+            exit(1)
         if vap < alt_vaf:
             continue
         if len(info[indel_head_dict['ref']]) > length or len(info[indel_head_dict['alt']]) > length:
@@ -92,7 +96,7 @@ def process_snv_report(pair, report, snv_head_list, snv_head_dict, tn_ratio, pos
 
 
 def filter_merge_reports(reports, panel, length, alt_vaf, cov):
-    snv_suffix = '.subsitutions.vep.prioritized_impact.report.xls'
+    snv_suffix = {'.subsitutions.vep.prioritized_impact.report.xls': 1, '.subsitutions.vep.curated_reports.xls': 1}
     # indel_suffix = '.indels.vep.prioritized_impact.report.xls'
 
     head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT' \
@@ -123,7 +127,7 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov):
         fn = os.path.basename(report)
         m = re.search('^(\d+-\d+_\d+-\d+)(\S+)', fn)
         (pair, suffix) = (m.group(1), m.group(2))
-        if suffix == snv_suffix:
+        if suffix in snv_suffix:
             process_snv_report(pair, report, snv_head_list, snv_head_dict, tn_ratio, pos_gene, alt_vaf, cov)
         else:
             process_indel_report(pair, report, indel_head_list, indel_head_dict, pos_gene, alt_vaf, cov, banned_tup,
@@ -140,7 +144,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--panel', action='store', dest='panel',
                         help='Panel of normals')
     parser.add_argument('-c', '--min_coverage', action='store', dest='cov',
-                        help='Min number of samples to see a variant to report it')
+                        help='Min read coverage')
 
     parser.add_argument('-l', '--length', action='store', dest='length',
                         help='Max indel length')
