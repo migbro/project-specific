@@ -56,7 +56,6 @@ for fn in open(flist):
             maf = data[5]
             flag = filt_var(tup, maf, banned_tup)
             if flag == 1:
-                var_type = type_dict[var_type]
                 repl_var_class = var_class.split('&')
                 to_cap = repl_var_class[0].split('_')
                 for i in xrange(len(to_cap)):
@@ -70,6 +69,7 @@ for fn in open(flist):
                         var_class = 'Frame_Shift_Ins'
                     else:
                         var_class = 'Frame_Shift_Del'
+                var_type = type_dict[var_type]
                 repl_dbsnp = dbsnp.split('&')
                 f = 0
                 for i in xrange(len(repl_dbsnp)):

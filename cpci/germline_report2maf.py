@@ -4,6 +4,27 @@ import sys
 import os
 
 
+def filt_var(maf):
+    if maf == '' or float(maf) <= 0.01:
+        return 1
+    else:
+        return 0
+
+
+def process_sub(ref):
+    if len(ref) == 2:
+        return 'DNP'
+    elif len(ref) == 3:
+        return 'TNP'
+    else:
+        return 'ONP'
+
+def process_indel(ref, alt):
+    if len(ref) > len(alt):
+        return 'DEL'
+    else:
+        return 'INS'
+
 flist = sys.argv[1]
 
 class_dict = {'3_Prime_UTR_Variant': '3\'UTR', '5_Prime_UTR_Variant': '5\'UTR', 'Downstream_Gene_Variant': '3\'Flank',
@@ -14,6 +35,7 @@ class_dict = {'3_Prime_UTR_Variant': '3\'UTR', '5_Prime_UTR_Variant': '5\'UTR', 
               'Start_Lost': 'Translation_Start_Site', 'Stop_Gained': 'Nonsense_Mutation',
               'Stop_Retained_Variant': 'Nonsense_Mutation', 'Synonymous_Variant': 'Silent',
               'Upstream_Gene_Variant': '5\'Flank', 'Stop_Lost': 'Nonstop_Mutation'}
+type_dict = {'insertion': 'INS', 'deletion': 'DEL', 'SNV': 'SNV', 'sequence_alteration': 'ONP'}
 header = '#version 2.4\nHugo_Symbol\tTumor_Sample_Barcode\tVariant_Classification\tHGVSp_Short\tNCBI_Build' \
          '\tChromosome\tStart_Position\tStrand\tVariant_Type\tReference_Allele\tMatch_Norm_Seq_Allele1\tdbSNP_RS' \
          '\tMutation_Status\tn_alt_count\tn_ref_count'
@@ -25,7 +47,8 @@ for fn in open(flist):
     head = next(fh)
     for line in fh:
         data = line.rstrip('\n').split('\t')
-        if data[10] == 'protein_coding':
+        flag = filt_var(data[16])
+        if flag == 1:
             (gene, bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct, ref_ct)\
                 = (data[6], parts[0], data[8], data[12], '37', data[0], data[1], '+', data[14], data[2], data[3],
                    data[13], 'germline', data[4], data[5])
@@ -42,6 +65,12 @@ for fn in open(flist):
                     var_class = 'Frame_Shift_Ins'
                 else:
                     var_class = 'Frame_Shift_Del'
+            if var_type == 'substitution':
+                var_type = process_sub(ref)
+            elif var_type == 'indel':
+                var_type = process_indel(ref, alt)
+            else:
+                var_type = type_dict[var_type]
             repl_dbsnp = dbsnp.split('&')
             f = 0
             for i in xrange(len(repl_dbsnp)):
