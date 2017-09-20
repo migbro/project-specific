@@ -46,6 +46,7 @@ for fn in open(flist):
                     if to_cap[i][0].islower():
                         to_cap[i] = to_cap[i][0].upper() + to_cap[i][1:]
                 var_class = '_'.join(to_cap)
+                var_class = class_dict[var_class]
                 # if var_class != 'Frameshift_Variant':
                 #     var_class = class_dict[var_class]
                 # else:
