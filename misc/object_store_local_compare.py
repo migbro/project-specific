@@ -82,7 +82,7 @@ def content_compare(novarc, cont, ldir, odir):
         fdict[fname]['fs'] = fsize
         i += 1
     sys.stderr.write(date_time() + 'Completed gathering file information, outputting results\n')
-    print 'File\tObject store size\tFile system size\tComment'
+    res_out.write('File\tObject store size\tFile system size\tComment\n')
     for fn in fdict:
         res_out.write(fn)
 
@@ -98,9 +98,9 @@ def content_compare(novarc, cont, ldir, odir):
             fsize = fdict[fn]['fs']
             res_out.write('\t' + fsize)
         if osize != fsize:
-            print '\tWarning! File size/existence mismatch!'
+            res_out.write('\tWarning! File size/existence mismatch!\n')
         else:
-            print '\tOK'
+            res_out.write('\tOK')
     res_out.close()
     sys.stderr.write('Fin!\n')
 
