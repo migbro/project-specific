@@ -61,6 +61,10 @@ def content_compare(novarc, cont, ldir, odir, segments):
                     osize = big_obj_dict[oname]
                 except:
                     sys.stderr.write('File ' + oname + ' appears to be actually empty.  Leaving size as 0!\n')
+            if '//' in oname:
+                sys.stderr.write(date_time() + '// found in ' + oname + ', replacing with single to make '
+                                                                        'compatible with local\n')
+                oname.replace('//', '/')
             fdict[oname] = {}
             fdict[oname]['obj'] = osize
         except:
