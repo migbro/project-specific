@@ -100,7 +100,7 @@ def content_compare(novarc, cont, ldir, odir):
         if osize != fsize:
             res_out.write('\tWarning! File size/existence mismatch!\n')
         else:
-            res_out.write('\tOK')
+            res_out.write('\tOK\n')
     res_out.close()
     sys.stderr.write('Fin!\n')
 
