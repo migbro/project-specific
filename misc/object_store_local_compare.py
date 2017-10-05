@@ -64,8 +64,7 @@ def content_compare(novarc, cont, ldir, odir):
             fdict[oname] = {}
             fdict[oname]['obj'] = osize
         except:
-            sys.stderr.write('Encountered an error processing object ' + fn + '\n')
-            pdb.set_trace()
+            sys.stderr.write('Encountered an error processing object ' + fn + ' skipped!\n')
     sys.stderr.write(date_time() + 'Completed processing object data for ' + cont + ' checking local\n')
     i += 1
     flist_cmd = 'find ' + ldir + ' -type f -print0 | xargs -0 stat -c "%s %n"'
@@ -82,7 +81,7 @@ def content_compare(novarc, cont, ldir, odir):
             fdict[fname] = {}
         fdict[fname]['fs'] = fsize
         i += 1
-    sys.stderr.write(date_time() + 'Completed gathering file information, outputtting results\n')
+    sys.stderr.write(date_time() + 'Completed gathering file information, outputting results\n')
     print 'File\tObject store size\tFile system size\tComment'
     for fn in fdict:
         res_out.write(fn)
