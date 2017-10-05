@@ -36,9 +36,10 @@ def content_compare(novarc, cont, ldir, odir):
     obj_list = subprocess.check_output(list_cmd, shell=True)
     i = 1
     mod = 1000
+    res_out = odir + '/' + cont + '_results.txt'
     for fn in re.findall('(.*)\n', obj_list):
-        m = re.search('\s*(.*)', fn)
-        (osize, odate, otime, oname) = m.group(1).split()
+        m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)', fn)
+        (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
         if i % mod == 0:
             sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
         if int(osize) == 0:
@@ -52,8 +53,8 @@ def content_compare(novarc, cont, ldir, odir):
     i = 1
     mod = 1000
     for fn in re.findall('(.*)\n', file_list):
-        m = re.search('\s*(.*)', fn)
-        (fsize, fname) = m.group(1).split()
+        m = re.search('\s*(\S+)\s+(\S+)', fn)
+        (fsize, fname) = (m.group(1), m.group(2))
         fname = fname.lstrip(ldir + '/')
         if i % mod == 0:
             sys.stderr.write(date_time() + 'Processing file ' + str(i) + ' ' + fname + '\n')
@@ -64,26 +65,23 @@ def content_compare(novarc, cont, ldir, odir):
     sys.stderr.write(date_time() + 'Completed gathering file information, outputtting results\n')
     print 'File\tObject store size\tFile system size\tComment'
     for fn in fdict:
-        sys.stdout.write(fn)
+        res_out.write(fn)
 
         (osize, fsize) = ('0', '0')
         if 'obj' not in fdict[fn]:
-            sys.stdout.write('\tNA')
+            res_out.write('\tNA')
         else:
             osize = fdict[fn]['obj']
-            sys.stdout.write('\t' + osize)
+            res_out.write('\t' + osize)
         if 'fs' not in fdict[fn]:
-            sys.stdout.write('\tNA')
+            res_out.write('\tNA')
         else:
             fsize = fdict[fn]['fs']
-            sys.stdout.write('\t' + fsize)
+            res_out.write('\t' + fsize)
         if osize != fsize:
             print '\tWarning! File size/existence mismatch!'
         else:
             print '\tOK'
-
-
-
 
 
 if __name__ == "__main__":
