@@ -4,6 +4,7 @@ import sys
 import subprocess
 import re
 import time
+import pdb
 
 
 def date_time():
@@ -38,14 +39,18 @@ def content_compare(novarc, cont, ldir, odir):
     mod = 1000
     res_out = odir + '/' + cont + '_results.txt'
     for fn in re.findall('(.*)\n', obj_list):
-        m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)', fn)
-        (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
-        if i % mod == 0:
-            sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
-        if int(osize) == 0:
-            osize = get_total_size(cont, oname)
-        fdict[oname] = {}
-        fdict[oname]['obj'] = osize
+        try:
+            m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)', fn)
+            (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
+            if i % mod == 0:
+                sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
+            if int(osize) == 0:
+                osize = get_total_size(cont, oname)
+            fdict[oname] = {}
+            fdict[oname]['obj'] = osize
+        except:
+            sys.stderr.write('Encountered an error processing object ' + fn + '\n')
+            pdb.set_trace()
     sys.stderr.write(date_time() + 'Completed processing object data for ' + cont + ' checking local\n')
     i += 1
     flist_cmd = 'find ' + ldir + ' -type f -print0 | xargs -0 stat -c "%y %s %n"'
