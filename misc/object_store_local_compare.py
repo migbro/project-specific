@@ -21,12 +21,20 @@ def source_novarc(novarc):
             os.environ[k] = v
 
 
-def get_total_size(cont, oname):
-    stat_cmd = 'swift stat ' + cont + ' ' + oname + ' | grep Length'
-    res = subprocess.check_output(stat_cmd, shell=True)
-    res = res.rstrip('\n')
-    m = re.search('(\d+$)', res)
-    return m.group(1)
+def build_segs(cont):
+    seg_cmd = 'swift list ' + cont + '_segments '
+    temp = {}
+    try:
+        segs = subprocess.check_output(seg_cmd, shell=True)
+        for seg in re.findall('(.*)\n', segs):
+            parts = seg.split('/')
+            cur = '/'.join(parts[0:(len(parts) - 4)])
+            if cur not in temp:
+                temp[cur] = parts[-3]
+        return temp
+    except:
+        sys.stderr.write(date_time() + 'No segments found for container ' + cont + 'skipping!\n')
+        return 0
 
 
 def content_compare(novarc, cont, ldir, odir):
@@ -36,8 +44,11 @@ def content_compare(novarc, cont, ldir, odir):
     sys.stderr.write(date_time() + 'Getting object list for container ' + cont + '\n')
     obj_list = subprocess.check_output(list_cmd, shell=True)
     i = 1
-    mod = 100
+    mod = 1000
     res_out = odir + '/' + cont + '_results.txt'
+    sys.stderr.write(date_time() + 'Building segments dict\n')
+    big_obj_dict = build_segs(cont)
+    sys.stderr.write(date_time() + 'Segments processed, parsing object data\n')
     for fn in re.findall('(.*)\n', obj_list):
         try:
             # added extra space grouping since version 3.3 has it, would have to remove for v2.6
@@ -45,8 +56,8 @@ def content_compare(novarc, cont, ldir, odir):
             (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
             if i % mod == 0:
                 sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
-            if int(osize) == 0:
-                osize = get_total_size(cont, oname)
+            if int(osize) == 0 and isinstance(big_obj_dict, dict):
+                osize = big_obj_dict[oname]
             fdict[oname] = {}
             fdict[oname]['obj'] = osize
         except:
@@ -57,7 +68,7 @@ def content_compare(novarc, cont, ldir, odir):
     flist_cmd = 'find ' + ldir + ' -type f -print0 | xargs -0 stat -c "%s %n"'
     file_list = subprocess.check_output(flist_cmd, shell=True)
     i = 1
-    mod = 100
+    mod = 1000
     for fn in re.findall('(.*)\n', file_list):
         m = re.search('\s*(\S+)\s+(\S+)', fn)
         (fsize, fname) = (m.group(1), m.group(2))
