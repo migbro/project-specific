@@ -52,7 +52,7 @@ def content_compare(novarc, cont, ldir, odir):
     for fn in re.findall('(.*)\n', obj_list):
         try:
             # added extra space grouping since version 3.3 has it, would have to remove for v2.6
-            m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+(\S+)', fn)
+            m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+(.*)', fn)
             (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
             if i % mod == 0:
                 sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
@@ -72,7 +72,7 @@ def content_compare(novarc, cont, ldir, odir):
     i = 1
     mod = 1000
     for fn in re.findall('(.*)\n', file_list):
-        m = re.search('\s*(\S+)\s+(\S+)', fn)
+        m = re.search('\s*(\S+)\s+(.*)', fn)
         (fsize, fname) = (m.group(1), m.group(2))
         fname = fname.lstrip(ldir + '/')
         if i % mod == 0:
