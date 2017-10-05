@@ -57,7 +57,10 @@ def content_compare(novarc, cont, ldir, odir):
             if i % mod == 0:
                 sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
             if int(osize) == 0 and isinstance(big_obj_dict, dict):
-                osize = big_obj_dict[oname]
+                try:
+                    osize = big_obj_dict[oname]
+                except:
+                    sys.stderr.write('File ' + oname + ' appears to be actually empty.  Leaving size as 0!\n')
             fdict[oname] = {}
             fdict[oname]['obj'] = osize
         except:
