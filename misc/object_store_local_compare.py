@@ -37,7 +37,7 @@ def build_segs(cont):
         return 0
 
 
-def content_compare(novarc, cont, ldir, odir):
+def content_compare(novarc, cont, ldir, odir, segments):
     fdict = {}
     source_novarc(novarc)
     list_cmd = 'swift list ' + cont + ' --long'
@@ -47,7 +47,7 @@ def content_compare(novarc, cont, ldir, odir):
     mod = 1000
     res_out = open(odir + '/' + cont + '_results.txt', 'w')
     sys.stderr.write(date_time() + 'Building segments dict\n')
-    big_obj_dict = build_segs(cont)
+    big_obj_dict = build_segs(segments)
     sys.stderr.write(date_time() + 'Segments processed, parsing object data\n')
     for fn in re.findall('(.*)\n', obj_list):
         try:
@@ -113,6 +113,8 @@ if __name__ == "__main__":
                         help='.novarc file to use for swift')
     parser.add_argument('-c', '--container', action='store', dest='cont',
                         help='Object store container to check')
+    parser.add_argument('-s', '--segments', action='store', dest='segments',
+                        help='Object store segments container to use to check for larger files.  LEAVE OFF _segments')
     parser.add_argument('-d', '--directory', action='store', dest='ldir',
                         help='Local directory to check against')
     parser.add_argument('-o', '--output', action='store', dest='odir',
@@ -123,5 +125,5 @@ if __name__ == "__main__":
         exit(1)
 
     inputs = parser.parse_args()
-    (novarc, cont, ldir, odir) = (inputs.novarc, inputs.cont, inputs.ldir, inputs.odir)
-    content_compare(novarc, cont, ldir, odir)
+    (novarc, cont, ldir, odir, segments) = (inputs.novarc, inputs.cont, inputs.ldir, inputs.odir, inputs.segments)
+    content_compare(novarc, cont, ldir, odir, segments)
