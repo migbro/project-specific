@@ -36,7 +36,7 @@ def content_compare(novarc, cont, ldir, odir):
     sys.stderr.write(date_time() + 'Getting object list for container ' + cont + '\n')
     obj_list = subprocess.check_output(list_cmd, shell=True)
     i = 1
-    mod = 1000
+    mod = 100
     res_out = odir + '/' + cont + '_results.txt'
     for fn in re.findall('(.*)\n', obj_list):
         try:
@@ -54,10 +54,10 @@ def content_compare(novarc, cont, ldir, odir):
             pdb.set_trace()
     sys.stderr.write(date_time() + 'Completed processing object data for ' + cont + ' checking local\n')
     i += 1
-    flist_cmd = 'find ' + ldir + ' -type f -print0 | xargs -0 stat -c "%y %s %n"'
+    flist_cmd = 'find ' + ldir + ' -type f -print0 | xargs -0 stat -c "%s %n"'
     file_list = subprocess.check_output(flist_cmd, shell=True)
     i = 1
-    mod = 1000
+    mod = 100
     for fn in re.findall('(.*)\n', file_list):
         m = re.search('\s*(\S+)\s+(\S+)', fn)
         (fsize, fname) = (m.group(1), m.group(2))
