@@ -40,7 +40,8 @@ def content_compare(novarc, cont, ldir, odir):
     res_out = odir + '/' + cont + '_results.txt'
     for fn in re.findall('(.*)\n', obj_list):
         try:
-            m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)', fn)
+            # added extra space grouping since version 3.3 has it, would have to remove for v2.6
+            m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+(\S+)', fn)
             (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
             if i % mod == 0:
                 sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
