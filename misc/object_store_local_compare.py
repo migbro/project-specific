@@ -45,7 +45,7 @@ def content_compare(novarc, cont, ldir, odir):
     obj_list = subprocess.check_output(list_cmd, shell=True)
     i = 1
     mod = 1000
-    res_out = odir + '/' + cont + '_results.txt'
+    res_out = open(odir + '/' + cont + '_results.txt', 'w')
     sys.stderr.write(date_time() + 'Building segments dict\n')
     big_obj_dict = build_segs(cont)
     sys.stderr.write(date_time() + 'Segments processed, parsing object data\n')
@@ -101,6 +101,8 @@ def content_compare(novarc, cont, ldir, odir):
             print '\tWarning! File size/existence mismatch!'
         else:
             print '\tOK'
+    res_out.close()
+    sys.stderr.write('Fin!\n')
 
 
 if __name__ == "__main__":
