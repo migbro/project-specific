@@ -64,7 +64,7 @@ def content_compare(novarc, cont, ldir, odir, segments):
             if '//' in oname:
                 sys.stderr.write(date_time() + '// found in ' + oname + ', replacing with single to make '
                                                                         'compatible with local\n')
-                oname.replace('//', '/')
+                oname = oname.replace('//', '/')
             fdict[oname] = {}
             fdict[oname]['obj'] = osize
         except:
