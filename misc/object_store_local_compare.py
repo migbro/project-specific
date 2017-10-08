@@ -78,7 +78,7 @@ def content_compare(novarc, cont, ldir, odir, segments):
     for fn in re.findall('(.*)\n', file_list):
         m = re.search('\s*(\S+)\s+(.*)', fn)
         (fsize, fname) = (m.group(1), m.group(2))
-        fname = fname.replace(ldir + '/', '')
+        fname = fname.replace(ldir + '/', '', 1)
         if i % mod == 0:
             sys.stderr.write(date_time() + 'Processing file ' + str(i) + ' ' + fname + '\n')
         if fname not in fdict:
