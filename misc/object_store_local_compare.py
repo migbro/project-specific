@@ -52,8 +52,11 @@ def content_compare(novarc, cont, ldir, odir, segments):
     for fn in re.findall('(.*)\n', obj_list):
         try:
             # added extra space grouping since version 3.3 has it, would have to remove for v2.6
-            m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+(.*)', fn)
-            (osize, odate, otime, oname) = (m.group(1), m.group(2), m.group(3), m.group(4))
+            # m = re.search('\s*(\S+)\s+(\S+)\s+(\S+)\s+\S+\s+(.*)', fn)
+            # dumped regex, first three attrs consistent, last is always object name
+            fn = fn.strip()
+            parts = fn.split()
+            (osize, odate, otime, oname) = (parts[0], parts[1], parts[2], parts[-1])
             if i % mod == 0:
                 sys.stderr.write(date_time() + 'Processing object ' + str(i) + ' ' + oname + '\n')
             if int(osize) == 0 and isinstance(big_obj_dict, dict):
