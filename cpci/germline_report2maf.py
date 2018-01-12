@@ -26,6 +26,7 @@ def process_indel(ref, alt):
         return 'INS'
 
 flist = sys.argv[1]
+vep = sys.argv[2]
 
 class_dict = {'3_Prime_UTR_Variant': '3\'UTR', '5_Prime_UTR_Variant': '5\'UTR', 'Downstream_Gene_Variant': '3\'Flank',
               'Inframe_Deletion': 'In_Frame_Del', 'Inframe_Insertion': 'In_Frame_Ins', 'Intergenic_Variant': 'IGR',
@@ -47,11 +48,20 @@ for fn in open(flist):
     head = next(fh)
     for line in fh:
         data = line.rstrip('\n').split('\t')
-        flag = filt_var(data[16])
+        maf = data[16]
+        if vep == '91':
+            maf = data[17]
+        flag = filt_var(maf)
         if flag == 1:
-            (gene, bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct, ref_ct)\
-                = (data[6], parts[0], data[8], data[12], '37', data[0], data[1], '+', data[14], data[2], data[3],
-                   data[13], 'germline', data[4], data[5])
+
+            (gene, bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct,
+             ref_ct) = (data[6], parts[0], data[8], data[12], '37', data[0], data[1], '+', data[14], data[2],
+                        data[3], data[13], 'germline', data[4], data[5])
+            # some shifted in vep91 version
+            if vep == '91':
+                (gene, bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct,
+                 ref_ct) = (data[6], parts[0], data[9], data[13], '37', data[0], data[1], '+', data[15], data[2],
+                            data[3], data[14], 'germline', data[4], data[5])
             repl_var_class = var_class.split('&')
             to_cap = repl_var_class[0].split('_')
             for i in xrange(len(to_cap)):
