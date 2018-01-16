@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import sys
 import os
@@ -13,7 +13,8 @@ def process_indel_report(pair, report, indel_head_list, indel_head_dict, pos_gen
     maf = 0.01
     # biotype = 'protein_coding'
     weak_impact = {'MODIFIER': 1, 'LOW': 1}
-    # 'gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'ExAC_MAF', 'impact', 'effect', 'codon_change', 'amino_acid_change'
+    # 'gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'ExAC_MAF', 'impact', 'effect', 'codon_change',
+    #  'amino_acid_change'
     for line in cur:
         if line == '\n':
             continue

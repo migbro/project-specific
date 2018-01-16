@@ -12,7 +12,8 @@ def process_germ_report(bnid, report, germ_head_list, germ_head_dict, cadd, cov,
     maf = 0.01
     # biotype = 'protein_coding'
     weak_impact = {'MODIFIER': 1, 'LOW': 1}
-    # 'gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'cadd', 'snp_ID', 'ExAC_MAF', 'impact', 'effect', 'codon_change', 'amino_acid_change'
+    # 'gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'cadd', 'snp_ID', 'ExAC_MAF', 'impact', 'effect', 'codon_change',
+    # 'amino_acid_change'
     for line in cur:
         if line == '\n':
             continue

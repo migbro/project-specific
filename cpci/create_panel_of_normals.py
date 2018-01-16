@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 import re
 import sys
 
@@ -38,10 +38,11 @@ def create_pon(vlist):
     for tup in banned_tup:
         sys.stdout.write(tup + '\t' + str(banned_tup[tup]) + '\n')
 
+
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Creates panel of normals for vcf.')
+    parser = argparse.ArgumentParser(description='Creates panel of normals for vcf, use somatic .')
     parser.add_argument('-l', '--list', action='store', dest='vlist',
                         help='List of vcf files')
 
