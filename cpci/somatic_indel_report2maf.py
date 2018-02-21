@@ -23,7 +23,7 @@ def filt_var(tup, maf, banned_tup):
         return 0
 
 
-def gen_indel_maf(flist, pon):
+def gen_indel_maf(flist, pon, vep):
 
     banned_tup = build_banned(pon)
 
@@ -40,18 +40,22 @@ def gen_indel_maf(flist, pon):
              '\tChromosome\tStart_Position\tStrand\tVariant_Type\tReference_Allele\tTumor_Seq_Allele1\tdbSNP_RS' \
              '\tMutation_Status\tt_alt_count\tt_ref_count'
     print header
+    shift = 0
+    if vep != '84':
+        shift = 1
     for fn in open(flist):
         fn = fn.rstrip('\n')
         parts = os.path.basename(fn).split('.')
         (tum_bnid, norm_bnids) = parts[0].split('_')
         fh = open(fn)
-        head  = next(fh)
+        next(fh)
         for line in fh:
             data = line.rstrip('\n').split('\t')
-            if data[10] != 'MODIFIER':
+            if data[(10 + shift)] != 'MODIFIER':
                 (gene, tum_bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct,
-                 ref_ct) = (data[6], tum_bnid, data[9], data[13], '37', data[0], data[1], '+', data[8], data[2], data[3],
-                       data[4], 'somatic', data[14], data[15])
+                 ref_ct) = (data[6], tum_bnid, data[(9 + shift)], data[(13 + shift)], '37', data[0], data[1], '+',
+                            data[(8 + shift)], data[2], data[3], data[4], 'somatic', data[(14 + shift)],
+                            data[(15 + shift)])
                 tup = '\t'.join((chrom, start, ref, alt))
                 maf = data[5]
                 flag = filt_var(tup, maf, banned_tup)
@@ -95,6 +99,7 @@ if __name__ == "__main__":
                                                  'cbioportal.')
     parser.add_argument('-l', '--list', action='store', dest='flist', help='List of somatic indel variant report files')
     parser.add_argument('-p', '--pon', action='store', dest='pon', help='Panel of normals to filter on')
+    parser.add_argument('-v', '--vep', action='store', dest='vep', help='Version of vep used')
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -103,4 +108,5 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
     flist = inputs.flist
     pon = inputs.pon
-    gen_indel_maf(flist, pon)
+    vep = inputs.vep
+    gen_indel_maf(flist, pon, vep)

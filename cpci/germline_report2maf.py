@@ -19,6 +19,7 @@ def process_sub(ref):
     else:
         return 'ONP'
 
+
 def process_indel(ref, alt):
     if len(ref) > len(alt):
         return 'DEL'

@@ -11,7 +11,7 @@ def filt_var(tn_ratio, maf, target):
         return 0
 
 
-def gen_snv_maf(flist):
+def gen_snv_maf(flist, vep):
 
     class_dict = {'3_Prime_UTR_Variant': '3\'UTR', '5_Prime_UTR_Variant': '5\'UTR', 'Downstream_Gene_Variant': '3\'Flank',
                   'Inframe_Deletion': 'In_Frame_Del', 'Inframe_Insertion': 'In_Frame_Ins', 'Intergenic_Variant': 'IGR',
@@ -25,18 +25,21 @@ def gen_snv_maf(flist):
              '\tChromosome\tStart_Position\tStrand\tVariant_Type\tReference_Allele\tTumor_Seq_Allele1\tdbSNP_RS' \
              '\tMutation_Status\tt_alt_count\tt_ref_count'
     print header
+    shift = 0
+    if vep != '84':
+        shift = 1
     for fn in open(flist):
         fn = fn.rstrip('\n')
         parts = os.path.basename(fn).split('.')
         (tum_bnid, norm_bnids) = parts[0].split('_')
         fh = open(fn)
-        head = next(fh)
+        next(fh)
         for line in fh:
             data = line.rstrip('\n').split('\t')
-            if data[17] != 'MODIFIER':
+            if data[(17 + shift)] != 'MODIFIER':
                 (gene, tum_bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct,
-                 ref_ct) = (data[14], tum_bnid, data[16], data[20], '37', data[0], data[1], '+', 'SNV', data[3], data[4],
-                       data[12], 'somatic', data[8], data[9])
+                 ref_ct) = (data[14], tum_bnid, data[(16 + shift)], data[(20 + shift)], '37', data[0], data[1], '+',
+                            'SNV', data[3], data[4], data[12], 'somatic', data[8], data[9])
                 (tn_ratio, maf, target) = (data[11], data[13], data[-1])
                 flag = filt_var(tn_ratio, maf, target)
                 if flag == 1:
@@ -78,6 +81,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Converts snv report files into single mag file compatible with '
                                                  'cbioportal.')
     parser.add_argument('-l', '--list', action='store', dest='flist', help='List of snv report files')
+    parser.add_argument('-v', '--vep', action='store', dest='vep', help='Version of vep used')
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -85,4 +89,5 @@ if __name__ == "__main__":
 
     inputs = parser.parse_args()
     flist = inputs.flist
-    gen_snv_maf(flist)
+    vep = inputs.vep
+    gen_snv_maf(flist, vep)
