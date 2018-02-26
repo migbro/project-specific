@@ -10,7 +10,7 @@ def process_indel_report(pair, report, indel_head_list, indel_head_dict, pos_gen
                          vclass):
     cur = open(report)
     next(cur)
-    maf = 0.01
+    maf = 1.0
     # biotype = 'protein_coding'
     weak_impact = {'MODIFIER': 1, 'LOW': 1}
     # 'gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'ExAC_MAF', 'impact', 'effect', 'codon_change',
@@ -58,7 +58,7 @@ def process_snv_report(pair, report, snv_head_list, snv_head_dict, tn_ratio, pos
 
     cur = open(report)
     next(cur)
-    maf = 0.01
+    maf = 1.0
     tn = 2
     # biotype = 'protein_coding'
     weak_impact = {'MODIFIER': 1, 'LOW': 1}
@@ -96,8 +96,9 @@ def process_snv_report(pair, report, snv_head_list, snv_head_dict, tn_ratio, pos
     cur.close()
 
 
-def filter_merge_reports(reports, panel, length, alt_vaf, cov):
-    snv_suffix = {'.subsitutions.vep.prioritized_impact.report.xls': 1, '.subsitutions.vep.curated_reports.xls': 1}
+def filter_merge_reports(reports, panel, length, alt_vaf, cov, vep):
+    snv_suffix = {'.subsitutions.vep.prioritized_impact.report.xls': 1, '.subsitutions.vep.curated_reports.xls': 1,
+                  '.subsitutions.vep91.prioritized_impact.report.xls': 1}
     # indel_suffix = '.indels.vep.prioritized_impact.report.xls'
 
     head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT' \
@@ -114,6 +115,18 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov):
     indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 14, 'vaf': 16, 'snp_ID': 4,
                        'ExAC_MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 12, 'amino_acid_change': 13,
                        'isoform': 7}
+    if vep == '91':
+        snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'gnomAD_AF',
+                         'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
+        snv_head_dict = {'gene': 14, 'chr': 0, 'pos': 1, 'ref': 3, 'alt': 4, 'tumor_alt_count': 9, '%_tumor_alt': 10,
+                         'snp_ID': 12, 'gnomAD_AF': 13, 'impact': 18, 'effect': 17, 'codon_change': 20,
+                         'amino_acid_change': 21, 'isoform': 16}
+        indel_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'gnomAD_AF',
+                           'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
+        indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 15, 'vaf': 17, 'snp_ID': 4,
+                           'gnomAD_AF': 5, 'impact': 11, 'effect': 10, 'codon_change': 13, 'amino_acid_change': 14,
+                           'isoform': 8}
+
     vclass = 8
     banned_tup = {}
     length = int(length)
@@ -151,11 +164,14 @@ if __name__ == "__main__":
                         help='Max indel length')
     parser.add_argument('-v', '--vaf', action='store', dest='vaf',
                         help='Min variant allele frequency')
+    parser.add_argument('-s', '--vep', action='store', dest='vep',
+                        help='Version of vep used')
 
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
 
     inputs = parser.parse_args()
-    (reports, panel, length, avaf, cov) = (inputs.reports, inputs.panel, inputs.length, inputs.vaf, inputs.cov)
-    filter_merge_reports(reports, panel, length, avaf, cov)
+    (reports, panel, length, avaf, cov, vep) = (inputs.reports, inputs.panel, inputs.length, inputs.vaf, inputs.cov,
+                                                inputs.vep)
+    filter_merge_reports(reports, panel, length, avaf, cov, vep)
