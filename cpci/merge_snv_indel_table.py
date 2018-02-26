@@ -115,6 +115,7 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov, vep):
     indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 14, 'vaf': 16, 'snp_ID': 4,
                        'MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 12, 'amino_acid_change': 13,
                        'isoform': 7}
+    vclass = 8
     if vep == '91':
         snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'MAF',
                          'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
@@ -128,10 +129,11 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov, vep):
                            'isoform': 8}
         head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tgnomAD_AF\tIMPACT\tEFFECT' \
                '\tCODON_CHANGE\tAMINO_ACID_CHANGE\tTx Isoform Used'
+        vclass = 9
 
     print head
 
-    vclass = 8
+
     banned_tup = {}
     length = int(length)
     alt_vaf = int(alt_vaf)
