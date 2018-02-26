@@ -42,7 +42,7 @@ def process_indel_report(pair, report, indel_head_list, indel_head_dict, pos_gen
             continue
         if info[indel_head_dict['impact']] in weak_impact:
             continue
-        if len(info[indel_head_dict['ExAC_MAF']]) > 0 and float(info[indel_head_dict['ExAC_MAF']]) > maf:
+        if len(info[indel_head_dict['MAF']]) > 0 and float(info[indel_head_dict['MAF']]) > maf:
             continue
         if int(info[indel_head_dict['alt_cov']])/float(info[indel_head_dict['vaf']]) < cov:
             continue
@@ -84,7 +84,7 @@ def process_snv_report(pair, report, snv_head_list, snv_head_dict, tn_ratio, pos
             continue
         if info[snv_head_dict['impact']] in weak_impact:
             continue
-        if len(info[snv_head_dict['ExAC_MAF']]) > 0 and float(info[snv_head_dict['ExAC_MAF']]) > maf:
+        if len(info[snv_head_dict['MAF']]) > 0 and float(info[snv_head_dict['MAF']]) > maf:
             continue
         if int(info[snv_head_dict['tumor_alt_count']]) + int(info[(snv_head_dict['tumor_alt_count'] - 1)]) < cov:
             continue
@@ -104,27 +104,27 @@ def filter_merge_reports(reports, panel, length, alt_vaf, cov, vep):
     head = 'Sample_pair\tTYPE\tGENE\tCHROM\tPOS\tREF\tALT\tALT_CT\tALT_PCT\tsnp ID\tExAC_MAF\tIMPACT\tEFFECT' \
            '\tCODON_CHANGE\tAMINO_ACID_CHANGE\tTx Isoform Used'
     print head
-    snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'ExAC_MAF',
+    snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'MAF',
                      'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
     snv_head_dict = {'gene': 14, 'chr': 0, 'pos': 1, 'ref': 3, 'alt': 4, 'tumor_alt_count': 9, '%_tumor_alt': 10,
                      'snp_ID': 12, 'ExAC_MAF': 13, 'impact': 17, 'effect': 16, 'codon_change': 19,
                      'amino_acid_change': 20, 'isoform': 15}
     tn_ratio = 9
-    indel_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'ExAC_MAF',
+    indel_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'MAF',
                      'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
     indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 14, 'vaf': 16, 'snp_ID': 4,
                        'ExAC_MAF': 5, 'impact': 10, 'effect': 9, 'codon_change': 12, 'amino_acid_change': 13,
                        'isoform': 7}
     if vep == '91':
-        snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'gnomAD_AF',
+        snv_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'tumor_alt_count', '%_tumor_alt', 'snp_ID', 'MAF',
                          'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
         snv_head_dict = {'gene': 14, 'chr': 0, 'pos': 1, 'ref': 3, 'alt': 4, 'tumor_alt_count': 9, '%_tumor_alt': 10,
-                         'snp_ID': 12, 'gnomAD_AF': 13, 'impact': 18, 'effect': 17, 'codon_change': 20,
+                         'snp_ID': 12, 'MAF': 13, 'impact': 18, 'effect': 17, 'codon_change': 20,
                          'amino_acid_change': 21, 'isoform': 16}
         indel_head_list = ('gene', 'chr', 'pos', 'ref', 'alt', 'alt_cov', 'vaf', 'snp_ID', 'gnomAD_AF',
                            'impact', 'effect', 'codon_change', 'amino_acid_change', 'isoform')
         indel_head_dict = {'gene': 6, 'chr': 0, 'pos': 1, 'ref': 2, 'alt': 3, 'alt_cov': 15, 'vaf': 17, 'snp_ID': 4,
-                           'gnomAD_AF': 5, 'impact': 11, 'effect': 10, 'codon_change': 13, 'amino_acid_change': 14,
+                           'MAF': 5, 'impact': 11, 'effect': 10, 'codon_change': 13, 'amino_acid_change': 14,
                            'isoform': 8}
 
     vclass = 8
