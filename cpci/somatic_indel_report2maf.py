@@ -50,9 +50,10 @@ def gen_indel_maf(flist, pon, vep):
         (tum_bnid, norm_bnids) = parts[0].split('_')
         fh = open(fn)
         next(fh)
+        weak_impact = {'MODIFIER': 1, 'LOW': 1}
         for line in fh:
             data = line.rstrip('\n').split('\t')
-            if data[(10 + shift)] != 'MODIFIER':
+            if data[(10 + shift)] not in weak_impact:
                 (gene, tum_bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct,
                  ref_ct) = (data[6], tum_bnid, data[(9 + shift)], data[(13 + shift)], '37', data[0], data[1], '+',
                             data[(8 + shift)], data[2], data[3], data[4], 'somatic', data[(14 + shift)],

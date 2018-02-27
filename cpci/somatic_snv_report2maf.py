@@ -29,6 +29,7 @@ def gen_snv_maf(flist, vep):
     shift = 0
     if vep != '84':
         shift = 1
+    weak_impact = {'MODIFIER': 1, 'LOW': 1}
     for fn in open(flist):
         fn = fn.rstrip('\n')
         parts = os.path.basename(fn).split('.')
@@ -37,7 +38,7 @@ def gen_snv_maf(flist, vep):
         next(fh)
         for line in fh:
             data = line.rstrip('\n').split('\t')
-            if data[(17 + shift)] != 'MODIFIER':
+            if data[(17 + shift)] not in weak_impact:
                 (gene, tum_bnid, var_class, aa, build, chrom, start, strand, var_type, ref, alt, dbsnp, status, alt_ct,
                  ref_ct) = (data[14], tum_bnid, data[(16 + shift)], data[(20 + shift)], '37', data[0], data[1], '+',
                             'SNV', data[3], data[4], data[12], 'somatic', data[8], data[9])
