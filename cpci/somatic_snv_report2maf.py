@@ -5,7 +5,8 @@ import os
 
 
 def filt_var(tn_ratio, maf, target):
-    if (maf == '' or float(maf) <= 0.1) and float(tn_ratio) >= 2 and target == 'ON':
+    # if (maf == '' or float(maf) <= 0.1) and float(tn_ratio) >= 2 and target == 'ON':
+    if float(tn_ratio) >= 2 and target == 'ON':
         return 1
     else:
         return 0

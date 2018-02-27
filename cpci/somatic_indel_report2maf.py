@@ -17,7 +17,8 @@ def build_banned(pon):
 
 
 def filt_var(tup, maf, banned_tup):
-    if (maf == '' or float(maf) <= 0.1) and tup not in banned_tup:
+    # if (maf == '' or float(maf) <= 0.1) and tup not in banned_tup:
+    if tup not in banned_tup:
         return 1
     else:
         return 0
