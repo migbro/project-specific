@@ -5,7 +5,7 @@ import os
 
 
 def filt_var(maf):
-    if maf == '' or float(maf) <= 0.01:
+    if maf == '' or float(maf) <= 0.05:
         return 1
     else:
         return 0
