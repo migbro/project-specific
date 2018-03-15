@@ -5,7 +5,7 @@ import os
 # from math import log
 
 # cnv_dict = []
-rename_dict = []
+rename_dict = {}
 slist = []
 
 for line in open(sys.argv[1]):
