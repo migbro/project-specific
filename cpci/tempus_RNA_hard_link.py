@@ -62,13 +62,13 @@ def create_links(names, flist, dest, dry):
             os.mkdir(dest_dir)
         (flow_id, lane) = process_sample_sheet(csv, fparts)
         fq1f = fd + '/' + '_'.join(fparts) + '_T_1.fastq.gz'
-        if not os.path.isdir(fq1f):
+        if not os.path.isfile(fq1f):
             sys.stderr.write('Sample for ' + bnid + ' sheet ' + csv + ' does not conform. Check desired path ' + fq1f
                              + ' SKIPPING\n')
             continue
         fq1l = dest_dir + '/' + bnid + '_' + flow_id + '_' + lane + '_1_sequence.txt.gz'
         fq2f = fd + '/' + '_'.join(fparts) + '_T_2.fastq.gz'
-        if not os.path.isdir(fq2f):
+        if not os.path.isfile(fq2f):
             sys.stderr.write('Sample for ' + bnid + ' sheet ' + csv + ' does not conform. Check desired path ' + fq1f
                              + ' SKIPPING\n')
             continue
