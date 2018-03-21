@@ -73,14 +73,14 @@ def create_links(names, flist, dest, dry):
                              + ' SKIPPING\n')
             continue
         fq2l = dest_dir + '/' + bnid + '_' + flow_id + '_' + lane + '_2_sequence.txt.gz'
-        link_file = 'ln ' + fq1f + ' ' + fq1l + '; sleep 2'
+        link_file = 'ln ' + fq1f + ' ' + fq1l
         sys.stderr.write('Creating hard link\n' + link_file + '\n')
         if dry != 'y':
             subprocess.call(link_file, shell=True)
-        link_file = 'ln ' + fq2f + ' ' + fq2l
-        sys.stderr.write('Creating hard link\n' + link_file + '\n')
+        link_file2 = 'ln ' + fq2f + ' ' + fq2l
+        sys.stderr.write('Creating hard link\n' + link_file2 + '\n')
         if dry != 'y':
-            subprocess.call(link_file)
+            subprocess.call(link_file2, shell=True)
     sys.stderr.write('Fin!\n')
 
 
