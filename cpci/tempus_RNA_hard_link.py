@@ -15,7 +15,7 @@ def get_bnid(csv, names_ind):
 def process_sample_sheet(csv, fparts):
     flow_id = ''
     lane = ''
-    cur_id = fparts[0] + fparts[1]
+    cur_id = fparts[0] + '_' + fparts[1]
     fh = open(csv)
     f = 0
     for info in fh:
@@ -55,11 +55,22 @@ def create_links(names, flist, dest, dry):
         fd = os.path.dirname(csv)
         fparts = fn.split('.')[1].split('_')
         bnid = get_bnid(csv, name_ind)
+        dest_dir = dest + bnid
+        # make dir to hold fastqs for current sample
+        if not os.path.isdir(dest_dir):
+            sys.stderr.write('Making destination dir ' + dest_dir + '\n')
+            os.mkdir(dest_dir)
         (flow_id, lane) = process_sample_sheet(csv, fparts)
-        fq1f = fd + '/' + '_'.join(fparts) + '_T1.fastq.gz'
-        fq1l = dest + bnid + '_' + flow_id + '_' + lane + '_1_sequence.txt.gz'
-        fq2f = fd + '/' + '_'.join(fparts) + '_T2.fastq.gz'
-        fq2l = dest + bnid + '_' + flow_id + '_' + lane + '_2_sequence.txt.gz'
+        fq1f = fd + '/' + '_'.join(fparts) + '_T_1.fastq.gz'
+        if not os.path.isdir(fq1f):
+            sys.stderr.write('Sample for ' + bnid + ' sheet ' + csv + ' does not confome.  SKIPPING\n')
+            continue
+        fq1l = dest_dir + '/' + bnid + '_' + flow_id + '_' + lane + '_1_sequence.txt.gz'
+        fq2f = fd + '/' + '_'.join(fparts) + '_T_2.fastq.gz'
+        if not os.path.isdir(fq2f):
+            sys.stderr.write('Sample for ' + bnid + ' sheet ' + csv + ' does not confome.  SKIPPING\n')
+            continue
+        fq2l = dest_dir + '/' + bnid + '_' + flow_id + '_' + lane + '_2_sequence.txt.gz'
         link_file = 'ln ' + fq1f + ' ' + fq1l
         sys.stderr.write('Creating hard link\n' + link_file + '\n')
         if dry != 'y':
