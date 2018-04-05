@@ -30,5 +30,5 @@ cat analysis_files.txt annotation_files.txt bam_list.txt  fq_list.txt > $out\_to
 # study, like CPCI_Retrospective_Study
 $spath/upload_input.py pro_to_upload.txt '$pd/' $study
 # hammer amazon
-# mv flist.txt $out\_flist.txt
-# cat $out\_flist.txt | xargs -IFN -P 4 sh -c 'aws s3 cp FN --sse --profile tempus' 2> $out\_cp.log >> $out\_cp.log &
+mv flist.txt $out\_flist.txt
+cat $out\_flist.txt | xargs -IFN -P 4 sh -c 'aws s3 cp FN --sse --profile tempus' 2> $out\_cp.log >> $out\_cp.log &
