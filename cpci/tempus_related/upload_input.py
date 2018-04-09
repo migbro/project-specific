@@ -8,8 +8,8 @@ study = sys.argv[3]
 
 out = open('flist.txt', 'w')
 for line in open(flist):
-        line = line.rstrip('\n')
-        fn = line.replace(strip, '')
-        output = line + ' s3://tm-uchicago-pan/' + study + '/' + fn
-        out.write(output + '\n')
+    line = line.rstrip('\n')
+    fn = line.replace(strip, '')
+    output = line + ' s3://tm-uchicago-pan/' + study + '/' + fn
+    out.write(output + '\n')
 out.close()
