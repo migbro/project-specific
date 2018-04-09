@@ -59,7 +59,8 @@ def create_links(names, flist, dest, dry):
         # make dir to hold fastqs for current sample
         if not os.path.isdir(dest_dir):
             sys.stderr.write('Making destination dir ' + dest_dir + '\n')
-            os.mkdir(dest_dir)
+            if dry == 'n':
+                os.mkdir(dest_dir)
         (flow_id, lane) = process_sample_sheet(csv, fparts)
         fq1f = fd + '/' + '_'.join(fparts) + '_T_1.fastq.gz'
         if not os.path.isfile(fq1f):
