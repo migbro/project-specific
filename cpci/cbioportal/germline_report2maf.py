@@ -26,6 +26,10 @@ def process_indel(ref, alt):
     else:
         return 'INS'
 
+
+if len(sys.argv) != 3:
+    sys.stderr.write('Usage: ' + sys.argv[0] + ' {Germline report list} {vep version, 84 or 91}\n')
+    exit(1)
 flist = sys.argv[1]
 vep = sys.argv[2]
 

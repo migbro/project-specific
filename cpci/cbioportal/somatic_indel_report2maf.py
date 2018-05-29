@@ -97,7 +97,7 @@ def gen_indel_maf(flist, pon, vep):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Converts indel report files into single mag file compatible with '
+    parser = argparse.ArgumentParser(description='Converts indel report files into single maf file compatible with '
                                                  'cbioportal.')
     parser.add_argument('-l', '--list', action='store', dest='flist', help='List of somatic indel variant report files')
     parser.add_argument('-p', '--pon', action='store', dest='pon', help='Panel of normals to filter on')

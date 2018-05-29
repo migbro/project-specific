@@ -80,7 +80,7 @@ def gen_snv_maf(flist, vep):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Converts snv report files into single mag file compatible with '
+    parser = argparse.ArgumentParser(description='Converts snv report files into single maf file compatible with '
                                                  'cbioportal.')
     parser.add_argument('-l', '--list', action='store', dest='flist', help='List of snv report files')
     parser.add_argument('-v', '--vep', action='store', dest='vep', help='Version of vep used')
